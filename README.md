@@ -1,12 +1,8 @@
 # Data-Driven Attitude Modeling and Control of a Quadrotor UAV Using the Koopman Operator
 
-## <u>Team CD-14:</u>
+## By:
 
-1. **Arepalle Charan Kumar Reddy (207)**
-2. **Polturi Aditya Pavan (344)**
-3. **Koushik V (330)**
-4. **Rohit kanna S (349)**
-5. **Mahendrada Shalini (334)**
+**Arepalle Charan Kumar Reddy**
 
 ## Abstract
 
