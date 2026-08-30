@@ -1,0 +1,7 @@
+Channel,Algorithm,Settling time,Overshoot
+phi,PID,3.15s,20.53%
+phi,Koopman-LQR,2.95s,11.74%
+theta,PID,3.35s,16.80%
+theta,Koopman-LQR,2.90s,7.51%
+psi,PID,6.15s,-
+psi,Koopman-LQR,4.20s,-
