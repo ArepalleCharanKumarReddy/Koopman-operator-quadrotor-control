@@ -1,0 +1,104 @@
+<mujoco model="quadrotor_attitude_sitl">
+    <!--
+      MuJoCo SITL plant for reference of:
+      Data-Driven Attitude Modeling and Control of Quadrotor UAVs using Koopman Operator
+
+      IMPORTANT:
+      - Attitude-only model; translation/gravity are intentionally disabled.
+      - The Python scripts apply body-frame control torque through xfrc_applied.
+      - The free joint is the quadrotor base state.
+      - The 0.0025 s solver timestep is an exact divisor of the reference's 0.05 s data interval.
+      - Physical parameters below are explicit SITL assumptions because the reference does not
+        publish a complete numerical mass/inertia/actuator parameter set.
+    -->
+
+    <compiler angle="radian" autolimits="true" inertiafromgeom="false"/>
+
+    <option timestep="0.0025"
+            integrator="RK4"
+            gravity="0 0 0"
+            iterations="50"
+            tolerance="1e-10"/>
+
+    <size njmax="100" nconmax="100"/>
+
+    <default>
+        <geom contype="0" conaffinity="0" density="0"/>
+        <site size="0.01" rgba="0.1 0.8 0.1 1"/>
+    </default>
+
+    <worldbody>
+        <body name="base" pos="0 0 0">
+            <!-- The Python pipeline requires a free joint. -->
+            <freejoint name="base_free"/>
+
+            <!--
+              Explicit inertial parameters for the attitude plant.
+              Units: kg, kg*m^2.
+              These are reproducible SITL assumptions, not values claimed to be
+              reported by the base reference.
+            -->
+            <inertial
+                      pos="0 0 0"
+                      mass="1.20"
+                      diaginertia="0.020 0.020 0.035"/>
+
+            <!-- Central quadrotor body -->
+            <geom name="main_body"
+                  type="box"
+                  pos="0 0 0"
+                  size="0.12 0.09 0.035"
+                  rgba="0.25 0.25 0.25 1"/>
+
+            <!-- Forward/back and left/right arms -->
+            <geom name="arm_x"
+                  type="box"
+                  fromto="-0.30 0 0 0.30 0 0"
+                  size="0.018"
+                  rgba="0.10 0.10 0.10 1"/>
+            <geom name="arm_y"
+                  type="box"
+                  fromto="0 -0.30 0 0 0.30 0"
+                  size="0.018"
+                  rgba="0.10 0.10 0.10 1"/>
+
+            <!-- Rotor visual markers: no independent rotor dynamics are used. -->
+            <body name="rotor_front" pos="0.30 0 0">
+                <geom name="rotor_front_disk"
+                      type="cylinder"
+                      size="0.085 0.008"
+                      rgba="0.10 0.45 0.90 1"/>
+                <site name="rotor_front_site" pos="0 0 0"/>
+            </body>
+
+            <body name="rotor_back" pos="-0.30 0 0">
+                <geom name="rotor_back_disk"
+                      type="cylinder"
+                      size="0.085 0.008"
+                      rgba="0.90 0.25 0.15 1"/>
+                <site name="rotor_back_site" pos="0 0 0"/>
+            </body>
+
+            <body name="rotor_left" pos="0 0.30 0">
+                <geom name="rotor_left_disk"
+                      type="cylinder"
+                      size="0.085 0.008"
+                      rgba="0.15 0.75 0.25 1"/>
+                <site name="rotor_left_site" pos="0 0 0"/>
+            </body>
+
+            <body name="rotor_right" pos="0 -0.30 0">
+                <geom name="rotor_right_disk"
+                      type="cylinder"
+                      size="0.085 0.008"
+                      rgba="0.85 0.75 0.10 1"/>
+                <site name="rotor_right_site" pos="0 0 0"/>
+            </body>
+
+            <!-- Body-frame axes for visual debugging. -->
+            <site name="axis_x" type="capsule" pos="0.075 0 0" size="0.006" rgba="1 0 0 1"/>
+            <site name="axis_y" type="capsule" pos="0 0.075 0" size="0.006" rgba="0 1 0 1"/>
+            <site name="axis_z" type="capsule" pos="0 0 0.075" size="0.006" rgba="0 0 1 1"/>
+        </body>
+    </worldbody>
+</mujoco>
